@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 30% 6%;
+    --foreground: 215 20% 78%;
+
+    --card: 222 28% 8%;
+    --card-foreground: 215 20% 78%;
+
+    --popover: 222 26% 10%;
+    --popover-foreground: 215 20% 78%;
+
+    --primary: 215 25% 88%;
+    --primary-foreground: 222 30% 6%;
+
+    --secondary: 222 25% 12%;
+    --secondary-foreground: 215 15% 62%;
+
+    --muted: 222 22% 14%;
+    --muted-foreground: 215 12% 45%;
+
+    --accent: 220 25% 18%;
+    --accent-foreground: 215 25% 88%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 90%;
+
+    --border: 215 30% 100% / 0.07;
+    --input: 215 30% 100% / 0.10;
+    --ring: 215 20% 78%;
+
+    --radius: 1rem;
+
+    /* PrexFx custom tokens */
+    --prexfx-black: 222 30% 6%;
+    --prexfx-silver: 215 20% 78%;
+    --prexfx-silver-bright: 215 15% 92%;
+    --prexfx-silver-dim: 220 15% 28%;
+    --prexfx-glass: 215 30% 100% / 0.05;
+    --prexfx-glass-border: 215 30% 100% / 0.09;
+    --prexfx-glass-hover: 215 30% 100% / 0.14;
+    --prexfx-glow: 215 25% 88%;
+    --prexfx-profit: 150 60% 55%;
+    --prexfx-loss: 0 60% 50%;
+    --prexfx-grid: 215 30% 100% / 0.025;
+
+    --sidebar-background: 222 28% 8%;
+    --sidebar-foreground: 215 20% 78%;
+    --sidebar-primary: 215 25% 88%;
+    --sidebar-primary-foreground: 222 30% 6%;
+    --sidebar-accent: 222 22% 14%;
+    --sidebar-accent-foreground: 215 25% 88%;
+    --sidebar-border: 215 30% 100% / 0.07;
+    --sidebar-ring: 215 20% 78%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono antialiased;
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Architectural grid overlay */
+.prexfx-grid {
+  background-image:
+    linear-gradient(hsl(var(--prexfx-grid)) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--prexfx-grid)) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glassmorphism panels */
+.glass-panel {
+  background: hsl(var(--prexfx-glass));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid hsl(var(--prexfx-glass-border));
+}
+
+.glass-panel-hover:hover {
+  border-color: hsl(var(--prexfx-glass-hover));
+}
+
+/* Profit glow */
+.profit-glow {
+  text-shadow: 0 0 12px hsl(0 0% 100% / 0.4), 0 0 24px hsl(0 0% 100% / 0.15);
+}
+
+/* EKG heartbeat animation */
+@keyframes heartbeat-line {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-50%); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes gauge-sweep {
+  0% { transform: rotate(-90deg); }
+  100% { transform: rotate(var(--gauge-angle, 0deg)); }
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker-scroll 30s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(220 15% 28%);
+  border-radius: 2px;
+}
