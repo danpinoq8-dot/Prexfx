@@ -21,8 +21,7 @@ const ChartPanel = () => {
     const fetchCandles = async () => {
       try {
         const res = await fetch(
-          `${SCANNER_URL}?mode=candles&instrument=${selectedPair}&granularity=${timeframe}&count=60`,
-          {  }
+          `${SCANNER_URL}?mode=candles&instrument=${selectedPair}&granularity=${timeframe}&count=60`
         );
         const data = await res.json();
         if (active && data.candles) {
