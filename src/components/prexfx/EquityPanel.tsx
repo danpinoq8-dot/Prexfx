@@ -19,12 +19,8 @@ const EquityPanel = () => {
     };
     fetch();
 
-    const channel = supabase
-      .channel("equity-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "bot_config" }, () => fetch())
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
+    const interval = setInterval(fetchConfig, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const pnlPct = balance > 0 ? ((pnl / balance) * 100).toFixed(2) : "0.00";
