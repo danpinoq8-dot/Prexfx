@@ -20,9 +20,7 @@ const PriceTicker = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const res = await fetch(SCANNER_URL, {
-          ,
-        });
+        const res = await fetch(SCANNER_URL);
         const data = await res.json();
         if (data.quotes) setTickerData(data.quotes);
       } catch (e) {
