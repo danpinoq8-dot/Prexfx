@@ -7,12 +7,10 @@ const MarketScoutPanel = () => {
 
   useEffect(() => {
     const fetchSignals = async () => {
-      const { data } = await supabase
-        .from("trade_signals")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(4);
-      if (data) setSignals(data);
+      try {
+        const res = await appwrite.listDocuments("trade_signals");
+        setSignals((res.documents || []).slice(0, 4));
+      } catch (e) { console.error("Signal fetch error:", e); }
     };
     fetchSignals();
     const interval = setInterval(fetchSignals, 10000);
