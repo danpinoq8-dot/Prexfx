@@ -12,9 +12,7 @@ const NewsScout = () => {
   const fetchNews = async () => {
     setLoading(true);
     try {
-      const res = await fetch(SCANNER_URL, {
-        ,
-      });
+      const res = await fetch(SCANNER_URL);
       const data = await res.json();
       if (data.news && Array.isArray(data.news)) setNews(data.news);
       setLastFetch(data.fetched_at || new Date().toISOString());
