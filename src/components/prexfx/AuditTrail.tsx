@@ -8,21 +8,13 @@ const AuditTrail = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await supabase
-        .from("trade_signals")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(10);
+      const { data } = await appwrite.listDocuments("trade_signals").then(r => ({ data: r.documents.slice(0, 4) }));
       if (data) setSignals(data);
     };
     fetch();
 
-    const channel = supabase
-      .channel("audit-signals")
-      .on("postgres_changes", { event: "*", schema: "public", table: "trade_signals" }, () => fetch())
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
+    const interval = setInterval(fetchConfig, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
