@@ -12,8 +12,8 @@ const IntelligenceVault = () => {
   useEffect(() => {
     const fetchData = async () => {
       const [tradesRes, configRes] = await Promise.all([
-        supabase.from("trades").select("*").order("created_at", { ascending: false }).limit(100),
-        supabase.from("bot_config").select("*").limit(1).single(),
+        appwrite.listDocuments("trades").then(r => ({ data: r.documents })),
+        appwrite.listDocuments("bot_config").then(r => ({ data: r.documents[0] || null })),
       ]);
       if (tradesRes.data) setTrades(tradesRes.data);
       if (configRes.data) setBalance(Number(configRes.data.balance));
