@@ -9,12 +9,10 @@ const TradeVaultPanel = () => {
 
   useEffect(() => {
     const fetchTrades = async () => {
-      const { data } = await supabase
-        .from("trades")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(50);
-      if (data) setTrades(data);
+      try {
+        const res = await appwrite.listDocuments("trades");
+        setTrades(res.documents || []);
+      } catch (e) { console.error("Trade fetch error:", e); }
     };
     fetchTrades();
     const interval = setInterval(fetchTrades, 10000);
