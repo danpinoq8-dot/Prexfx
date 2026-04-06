@@ -9,7 +9,7 @@ import TradeVaultPanel from "@/components/prexfx/TradeVaultPanel";
 import HeartbeatLine from "@/components/prexfx/HeartbeatLine";
 import { toast } from "@/hooks/use-toast";
 
-const FUNCTIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
+const FUNCTIONS_URL = "/api";
 
 const TacticalHub = () => {
   const [botActive, setBotActive] = useState(false);
@@ -17,7 +17,7 @@ const TacticalHub = () => {
 
   useEffect(() => {
     const fetchConfig = async () => {
-      const { data } = await supabase.from("bot_config").select("*").limit(1).single();
+      const { data } = await appwrite.listDocuments("bot_config").then(r => ({ data: r.documents[0] || null }));
       if (data) {
         setBotActive(data.is_active);
         setLastScan(data.last_scan_at);
@@ -38,10 +38,14 @@ const TacticalHub = () => {
 
   const toggleBot = async () => {
     const newState = !botActive;
-    const { error } = await supabase
-      .from("bot_config")
-      .update({ is_active: newState, updated_at: new Date().toISOString() })
-      .not("id", "is", null);
+    const { error } = await (async () => {
+      const docs = await appwrite.listDocuments("bot_config");
+      if (docs.documents[0]) {
+        await appwrite.updateDocument("bot_config", docs.documents[0].$id, { is_active: newState, updated_at: new Date().toISOString() });
+        return { error: null };
+      }
+      return { error: "No config" };
+    })();
 
     if (error) {
       toast({ title: "Error", description: "Failed to toggle bot", variant: "destructive" });
@@ -56,7 +60,7 @@ const TacticalHub = () => {
 
     if (newState) {
       try {
-        const res = await fetch(`${FUNCTIONS_URL}/trade-engine`, {
+        const res = await fetch(`${FUNCTIONS_URL}/trade`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
         });
